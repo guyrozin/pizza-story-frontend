@@ -1,5 +1,5 @@
-// ── Topping price ─────────────────────────────────────────────────────────────
-export const TOPPING_PRICE = 13;
+// ── Topping price (default, per item override with toppingPrice) ──────────────
+export const TOPPING_PRICE = 8;
 
 // ── Available toppings ────────────────────────────────────────────────────────
 export const TOPPINGS = [
@@ -14,34 +14,81 @@ export const TOPPINGS = [
   'קלמטה',
   'חציל',
   'בטטה',
+  'אננס',
 ];
 
 // ── Menu items ────────────────────────────────────────────────────────────────
-// buildOwn: true  → tapping "הוסף" opens the ToppingModal
-// category: 'pizza' | 'side'
+//
+// Fields:
+//   buildOwn          → opens topping selector
+//   unlimitedToppings → toppings are free (price already baked in)
+//   toppingPrice      → per-item override of TOPPING_PRICE
+//   noToppings        → item has no toppings available
+//   addons            → array of extra options shown in modal
+//     { id, label, price, recommended, type:'checkbox'|'select', required, options:[{id,label}] }
+//   note              → info note shown in modal (e.g. "כולל פרמזן בצד")
+//   category          → 'pizza' | 'chefs' | 'pasta' | 'salad' | 'side'
+
 export const MENU_ITEMS = [
+
+  // ── Standard Pizzas ──────────────────────────────────────────────────────
   {
-    id: 'custom-family',
-    name: 'מגש משפחתי - הרכבה עצמית',
+    id: 'regular-pizza',
+    name: 'פיצה רגילה',
     price: 30,
     category: 'pizza',
     buildOwn: true,
     emoji: '🍕',
-    description: 'בנו את הפיצה שלכם עם התוספות שתרצו',
+    description: 'פיצה משפחתית + תוספות לבחירה',
+  },
+  {
+    id: 'xl-pizza',
+    name: 'פיצה XL',
+    price: 42,
+    category: 'pizza',
+    buildOwn: true,
+    emoji: '🍕',
+    description: 'פיצה ענקית + תוספות לבחירה',
+    tag: 'XL',
+    tagColor: '#7C3AED',
   },
   {
     id: 'personal',
     name: 'פיצה אישית',
-    price: 23,
+    price: 20,
+    category: 'pizza',
+    buildOwn: false,
+    emoji: '🍕',
+    description: 'פיצה אישית',
+  },
+  {
+    id: 'personal-unlimited',
+    name: 'פיצה אישית + תוספות ללא הגבלה',
+    price: 25,
     category: 'pizza',
     buildOwn: true,
+    unlimitedToppings: true,
     emoji: '🍕',
-    description: 'פיצה אישית + תוספות לבחירה',
+    description: 'פיצה אישית עם תוספות ללא הגבלה',
+    tag: 'ללא הגבלה',
+    tagColor: '#E31837',
+  },
+  {
+    id: 'vegan',
+    name: 'פיצה טבעונית',
+    price: 37,
+    category: 'pizza',
+    buildOwn: true,
+    isVegan: true,
+    emoji: '🌱',
+    description: 'בצק טבעוני, גבינה טבעונית + תוספות לבחירה',
+    tag: '🌱 טבעוני',
+    tagColor: '#22c55e',
   },
   {
     id: 'gluten-free',
     name: 'פיצה ללא גלוטן',
-    price: 42,
+    price: 37,
     category: 'pizza',
     buildOwn: true,
     emoji: '🌾',
@@ -50,58 +97,244 @@ export const MENU_ITEMS = [
     tagColor: '#3b82f6',
   },
   {
-    id: 'vegan',
-    name: 'פיצה טבעונית',
-    price: 42,
+    id: 'alfredo-cream',
+    name: 'פיצה אלפרדו שמנת',
+    price: 45,
     category: 'pizza',
-    buildOwn: true,
-    emoji: '🌱',
-    description: 'בצק טבעוני, גבינה טבעונית + תוספות',
-    isVegan: true,
-    tag: '🌱 טבעוני',
-    tagColor: '#22c55e',
+    buildOwn: false,
+    emoji: '🍕',
+    description: 'רוטב שמנת אלפרדו עשיר',
+    tag: 'פרמיום',
+    tagColor: '#FFC107',
+    tagTextColor: '#1A1A1A',
   },
   {
-    id: 'cream-mushroom',
-    name: 'פיצה משפחתית שמנת פטריות',
-    price: 45,
+    id: 'alfredo-mushroom',
+    name: 'פיצה אלפרדו פטריות טרי',
+    price: 50,
     category: 'pizza',
     buildOwn: true,
     emoji: '🍄',
-    description: 'שמנת טרייה, פטריות, גבינת פרמזן',
+    description: 'שמנת אלפרדו, פטריות טריות + תוספות לבחירה',
     tag: 'פרמיום',
     tagColor: '#FFC107',
+    tagTextColor: '#1A1A1A',
+  },
+
+  // ── Chef's Pizzas ─────────────────────────────────────────────────────────
+  {
+    id: 'chef-israeli',
+    name: 'הישראלית',
+    price: 42,
+    category: 'chefs',
+    buildOwn: false,
+    emoji: '🍕',
+    description: 'זיתים, תירס, פטריות',
+    tag: 'המלצת השף',
+    tagColor: '#F59E0B',
     tagTextColor: '#1A1A1A',
   },
   {
-    id: 'greek',
-    name: 'פיצה משפחתית יוונית',
-    price: 45,
-    category: 'pizza',
-    buildOwn: true,
-    emoji: '🫒',
-    description: 'זיתים, עגבניות שרי, בולגרית',
-    tag: 'פרמיום',
-    tagColor: '#FFC107',
+    id: 'chef-spicy',
+    name: 'החריפה',
+    price: 42,
+    category: 'chefs',
+    buildOwn: false,
+    emoji: '🌶️',
+    description: 'עגבניות, פלפל חריף, בצל',
+    tag: 'המלצת השף',
+    tagColor: '#F59E0B',
     tagTextColor: '#1A1A1A',
   },
+  {
+    id: 'chef-alfredo',
+    name: 'אלפרדו',
+    price: 45,
+    category: 'chefs',
+    buildOwn: false,
+    emoji: '🍕',
+    description: 'פיצת שמנת אלפרדו',
+    tag: 'המלצת השף',
+    tagColor: '#F59E0B',
+    tagTextColor: '#1A1A1A',
+  },
+  {
+    id: 'chef-hawaii',
+    name: 'הוואי',
+    price: 42,
+    category: 'chefs',
+    buildOwn: false,
+    emoji: '🍍',
+    description: 'אננס, פלפל חריף, בולגרית',
+    tag: 'המלצת השף',
+    tagColor: '#F59E0B',
+    tagTextColor: '#1A1A1A',
+  },
+  {
+    id: 'chef-unlimited',
+    name: 'פיצה ללא הגבלת תוספות',
+    price: 46,
+    category: 'chefs',
+    buildOwn: true,
+    unlimitedToppings: true,
+    emoji: '🍕',
+    description: 'בחרו כמה תוספות שתרצו — ללא תוספת מחיר',
+    tag: 'ללא הגבלה',
+    tagColor: '#E31837',
+  },
+  {
+    id: 'chef-greek',
+    name: 'יוונית',
+    price: 42,
+    category: 'chefs',
+    buildOwn: false,
+    emoji: '🫒',
+    description: 'בולגרית, עגבניות, זיתים שחורים',
+    tag: 'המלצת השף',
+    tagColor: '#F59E0B',
+    tagTextColor: '#1A1A1A',
+  },
+  {
+    id: 'chef-cheesy-crust',
+    name: 'פיצה שוליים גבינה',
+    price: 45,
+    category: 'chefs',
+    buildOwn: false,
+    noToppings: true,
+    emoji: '🧀',
+    description: 'גבינה נמסה בתוך שוליים פריכים',
+    tag: 'מומלץ!',
+    tagColor: '#E31837',
+  },
+
+  // ── Pasta ─────────────────────────────────────────────────────────────────
+  {
+    id: 'pasta-penne',
+    name: 'פסטה פנה',
+    price: 38,
+    category: 'pasta',
+    buildOwn: false,
+    emoji: '🍝',
+    description: 'פנה עם רוטב לבחירה',
+    addons: [
+      {
+        id: 'sauce',
+        label: 'בחרו רוטב',
+        type: 'select',
+        required: true,
+        options: [
+          { id: 'tomato',          label: 'רוטב עגבניות' },
+          { id: 'rose',            label: 'רוטב רוזה' },
+          { id: 'mushroom-cream',  label: 'שמנת פטריות' },
+        ],
+      },
+      { id: 'cheese-gratin', label: 'גרטן גבינה מעל', price: 7, recommended: true },
+    ],
+  },
+  {
+    id: 'ravioli-sweet-potato',
+    name: 'ראביולי בטטה',
+    price: 49,
+    category: 'pasta',
+    buildOwn: false,
+    emoji: '🍝',
+    description: 'ראביולי בטטה עם רוטב לבחירה',
+    note: 'כולל פרמזן בצד',
+    addons: [
+      {
+        id: 'sauce',
+        label: 'בחרו רוטב',
+        type: 'select',
+        required: true,
+        options: [
+          { id: 'tomato',         label: 'רוטב עגבניות' },
+          { id: 'rose',           label: 'רוטב רוזה' },
+          { id: 'mushroom-cream', label: 'שמנת פטריות' },
+        ],
+      },
+      { id: 'cheese-gratin', label: 'גרטן גבינה מעל', price: 8, recommended: true },
+    ],
+  },
+  {
+    id: 'ravioli-cheese',
+    name: 'ראביולי גבינה',
+    price: 49,
+    category: 'pasta',
+    buildOwn: false,
+    emoji: '🧀',
+    description: 'ראביולי גבינה עם רוטב לבחירה',
+    note: 'כולל פרמזן בצד',
+    addons: [
+      {
+        id: 'sauce',
+        label: 'בחרו רוטב',
+        type: 'select',
+        required: true,
+        options: [
+          { id: 'tomato',         label: 'רוטב עגבניות' },
+          { id: 'rose',           label: 'רוטב רוזה' },
+          { id: 'mushroom-cream', label: 'שמנת פטריות' },
+        ],
+      },
+      { id: 'cheese-gratin', label: 'גרטן גבינה מעל', price: 8, recommended: true },
+    ],
+  },
+
+  // ── Salads ────────────────────────────────────────────────────────────────
+  {
+    id: 'salad-classic',
+    name: 'סלט קלאסי',
+    price: 22,
+    category: 'salad',
+    buildOwn: false,
+    emoji: '🥗',
+    description: 'מלפפון, עגבנייה, בצל',
+    addons: [
+      { id: 'egg', label: 'הוספת ביצה', price: 5 },
+    ],
+  },
+  {
+    id: 'salad-greek',
+    name: 'סלט יווני',
+    price: 28,
+    category: 'salad',
+    buildOwn: false,
+    emoji: '🥗',
+    description: 'זיתים שחורים, בולגרית, מלפפון, עגבנייה',
+  },
+  {
+    id: 'salad-tuna',
+    name: 'סלט טונה',
+    price: 28,
+    category: 'salad',
+    buildOwn: false,
+    emoji: '🐟',
+    description: 'טונה, מלפפון, עגבנייה, תירס',
+  },
+
+  // ── Sides ─────────────────────────────────────────────────────────────────
   {
     id: 'garlic-bread',
-    name: 'לחם שום',
-    price: 30,
+    name: 'לחם שום משפחתי',
+    price: 20,
     category: 'side',
     buildOwn: false,
     emoji: '🥖',
     description: 'לחם שום קריספי מהתנור',
+    addons: [
+      { id: 'giant',        label: 'שדרוג לענק',     price: 12 },
+      { id: 'cheese-gratin', label: 'גרטן גבינה מעל', price: 8, recommended: true },
+    ],
   },
   {
     id: 'ziva',
     name: 'זיוה',
-    price: 35,
+    price: 30,
     category: 'side',
-    buildOwn: false,
-    emoji: '🥗',
-    description: 'סלט זיוה טרי',
+    buildOwn: true,
+    toppingPrice: 5,
+    emoji: '🥙',
+    description: 'מנת זיוה מיוחדת + תוספות לבחירה',
   },
 ];
 
@@ -109,7 +342,10 @@ export const MENU_ITEMS = [
 export const CATEGORIES = [
   { id: 'all',   label: 'הכל' },
   { id: 'pizza', label: '🍕 פיצות' },
-  { id: 'side',  label: '🥗 תוספות' },
+  { id: 'chefs', label: '👨‍🍳 פיצות שף' },
+  { id: 'pasta', label: '🍝 פסטה' },
+  { id: 'salad', label: '🥗 סלטים' },
+  { id: 'side',  label: '🥖 תוספות' },
   { id: 'vegan', label: '🌱 טבעוני' },
 ];
 
@@ -119,19 +355,18 @@ export function getCart() {
     const raw = localStorage.getItem('cart');
     if (!raw) return { items: [], total: 0 };
     const parsed = JSON.parse(raw);
-    // Support both old format { toppings, total } and new format { items, total }
     if (parsed.items) return parsed;
-    // Migrate old format
     if (parsed.toppings) {
       return {
         items: [{
-          cartId: 'legacy',
-          id: 'custom-family',
-          name: 'פיצה קלאסית',
+          cartId:    'legacy',
+          id:        'regular-pizza',
+          name:      'פיצה רגילה',
           basePrice: 30,
-          toppings: parsed.toppings,
-          buildOwn: true,
-          total: parsed.total || 30,
+          toppings:  parsed.toppings,
+          addons:    [],
+          buildOwn:  true,
+          total:     parsed.total || 30,
         }],
         total: parsed.total || 30,
       };
@@ -152,18 +387,29 @@ export function saveCart(items) {
   return total;
 }
 
-export function addItemToCart(menuItem, toppings) {
+// selectedAddons: array of { id, label, price } — already-selected addon objects
+export function addItemToCart(menuItem, toppings, selectedAddons = []) {
   const cart = getCart();
-  const toppingCost = toppings.length * TOPPING_PRICE;
+
+  const toppingUnitPrice = menuItem.unlimitedToppings ? 0 : (menuItem.toppingPrice || TOPPING_PRICE);
+  const toppingCost      = toppings.length * toppingUnitPrice;
+  const addonCost        = selectedAddons.reduce((sum, a) => sum + (a.price || 0), 0);
+
+  // Build a human-readable label for the selected sauce (if any)
+  const sauceAddon = selectedAddons.find(a => a.type === 'select' || a.isOption);
+
   const newItem = {
-    cartId: `${menuItem.id}-${Date.now()}`,
-    id: menuItem.id,
-    name: menuItem.name,
+    cartId:    `${menuItem.id}-${Date.now()}`,
+    id:        menuItem.id,
+    name:      menuItem.name,
     basePrice: menuItem.price,
     toppings,
-    buildOwn: menuItem.buildOwn,
-    total: menuItem.price + toppingCost,
+    addons:    selectedAddons,
+    buildOwn:  menuItem.buildOwn,
+    total:     menuItem.price + toppingCost + addonCost,
+    sauceAddon,
   };
+
   const newItems = [...cart.items, newItem];
   saveCart(newItems);
   return newItems;

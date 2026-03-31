@@ -55,14 +55,17 @@ export default function Cart() {
   };
 
   // ── Save edited toppings ─────────────────────────────────────────────────────
-  const handleEditSave = newToppings => {
-    const { cartItem } = editingItem;
+  const handleEditSave = ({ toppings: newToppings, selectedAddons }) => {
+    const { cartItem, menuItem } = editingItem;
+    const toppingUnitPrice = menuItem.unlimitedToppings ? 0 : (menuItem.toppingPrice || TOPPING_PRICE);
+    const addonCost        = (selectedAddons || []).reduce((sum, a) => sum + (a.price || 0), 0);
     const newItems = items.map(i => {
       if (i.cartId !== cartItem.cartId) return i;
       return {
         ...i,
         toppings: newToppings,
-        total: i.basePrice + newToppings.length * TOPPING_PRICE,
+        addons:   selectedAddons || [],
+        total:    i.basePrice + newToppings.length * toppingUnitPrice + addonCost,
       };
     });
     saveCart(newItems);
@@ -145,11 +148,15 @@ export default function Cart() {
                 {/* Details */}
                 <div className="flex-1 min-w-0">
                   <p className="font-black text-base leading-tight" style={{ color: DARK }}>{item.name}</p>
-                  {item.toppings.length > 0 ? (
-                    <p className="text-gray-400 text-xs mt-1 leading-relaxed">
-                      + {item.toppings.join(', ')}
+                  {item.toppings?.length > 0 && (
+                    <p className="text-gray-400 text-xs mt-1 leading-relaxed">+ {item.toppings.join(', ')}</p>
+                  )}
+                  {item.addons?.length > 0 && (
+                    <p className="text-xs mt-0.5" style={{ color: '#F59E0B' }}>
+                      {item.addons.map(a => a.label).join(' · ')}
                     </p>
-                  ) : (
+                  )}
+                  {!item.toppings?.length && !item.addons?.length && (
                     <p className="text-gray-300 text-xs mt-1">ללא תוספות</p>
                   )}
                   <p className="font-black text-lg mt-1.5" style={{ color: DARK }}>{item.total}₪</p>

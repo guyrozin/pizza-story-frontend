@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"C:\\\\Users\\\\guyro\\\\OneDrive\\\\שולחן העבודה\\\\VS\\\\pizza-story\\\\frontend\" && npm list react-router-dom 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\guyro\\\\OneDrive\\\\שולחן העבודה\\\\VS\\\\pizza-story\\\\frontend\" && npm start 2>&1)"
+    ]
+  }
+}

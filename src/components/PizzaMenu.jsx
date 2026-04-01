@@ -197,10 +197,12 @@ export default function PizzaMenu() {
             <div key={item.id} className="bg-white rounded-2xl shadow-sm overflow-hidden"
               style={{ border: '1px solid #f0f0f0' }}>
               <div className="flex items-center gap-4 p-4">
-                {/* Emoji */}
-                <div className="w-16 h-16 rounded-xl flex items-center justify-center text-3xl flex-shrink-0"
+                {/* Thumbnail */}
+                <div className="w-16 h-16 rounded-xl overflow-hidden flex items-center justify-center text-3xl flex-shrink-0"
                   style={{ background: '#f9f9f9', border: '1px solid #f0f0f0' }}>
-                  {item.emoji}
+                  {item.image
+                    ? <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                    : item.emoji}
                 </div>
 
                 {/* Info */}
